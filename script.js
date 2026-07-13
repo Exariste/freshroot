@@ -68,6 +68,7 @@ function chipHTML(item){
   const msg = encodeURIComponent(`আমি ${item} অর্ডার করতে চাই`);
   return `<span class="chip" data-name="${item.toLowerCase()}">
     <span>${item}</span>
+    <button class="chip-cart" type="button" data-item="${item}" aria-label="কার্টে যোগ করুন">+</button>
     <a class="chip-order" target="_blank" rel="noopener" href="https://wa.me/8801713366224?text=${msg}" aria-label="Order ${item} on WhatsApp">${WA_ICON}</a>
   </span>`;
 }
@@ -174,4 +175,168 @@ document.addEventListener("DOMContentLoaded", ()=>{
       status.classList.add("show");
     }
   });
+});
+
+/* ============ Cart (Products page) — submits to Google Form/Sheet ============ */
+
+// ⚠️ STEP 4 এ Google Form বানানোর পর এই ৫টা মান বসিয়ে দিন:
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSezXAr0-f3Tc3DaUZRpCFBr82FQipL_tPgwXggYuFRaMcnJrg/formResponse";
+const ENTRY = {
+  name:    "entry.917195860",
+  phone:   "entry.1340509731",
+  address: "entry.235764943",
+  order:   "entry.551415346",
+  notes:   "entry.361523153"
+};
+
+const CART_KEY = "freshroot_cart";
+let cart = [];
+try{ cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }catch(e){ cart = []; }
+
+function saveCart(){
+  try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){}
+}
+
+function addToCart(name){
+  const existing = cart.find(i=>i.name===name);
+  if(existing){ existing.qty++; } else { cart.push({name, qty:1}); }
+  saveCart();
+  renderCart();
+  pulseCartFab();
+}
+
+function changeQty(name, delta){
+  const item = cart.find(i=>i.name===name);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0) cart = cart.filter(i=>i.name!==name);
+  saveCart();
+  renderCart();
+}
+
+function removeFromCart(name){
+  cart = cart.filter(i=>i.name!==name);
+  saveCart();
+  renderCart();
+}
+
+function cartCount(){ return cart.reduce((s,i)=>s+i.qty,0); }
+
+function renderCart(){
+  const badge = document.getElementById("cartCount");
+  if(badge) badge.textContent = cartCount();
+
+  const list = document.getElementById("cartItemsList");
+  if(!list) return;
+
+  if(cart.length===0){
+    list.innerHTML = `<p class="cart-empty">আপনার কার্ট এখনো খালি — পণ্যের পাশে সবুজ "+" বাটনে চেপে যোগ করুন।</p>`;
+    return;
+  }
+  list.innerHTML = cart.map(i=>`
+    <div class="cart-row">
+      <span class="cart-row-name">${i.name}</span>
+      <div class="cart-row-qty">
+        <button type="button" data-act="dec" data-name="${i.name}" aria-label="কমান">−</button>
+        <span>${i.qty}</span>
+        <button type="button" data-act="inc" data-name="${i.name}" aria-label="বাড়ান">+</button>
+      </div>
+      <button type="button" class="cart-row-remove" data-act="remove" data-name="${i.name}" aria-label="সরান">✕</button>
+    </div>
+  `).join("");
+}
+
+function toggleCartDrawer(open){
+  const drawer = document.getElementById("cartDrawer");
+  const overlay = document.getElementById("cartOverlay");
+  if(!drawer) return;
+  const show = (open===undefined) ? !drawer.classList.contains("open") : open;
+  drawer.classList.toggle("open", show);
+  if(overlay) overlay.classList.toggle("show", show);
+  document.body.classList.toggle("cart-open", show);
+}
+
+function pulseCartFab(){
+  const fab = document.getElementById("cartFab");
+  if(!fab) return;
+  fab.classList.remove("pulse");
+  void fab.offsetWidth;
+  fab.classList.add("pulse");
+}
+
+function submitOrderToGoogleForm(payload){
+  const fd = new FormData();
+  fd.append(ENTRY.name, payload.name);
+  fd.append(ENTRY.phone, payload.phone);
+  fd.append(ENTRY.address, payload.address);
+  fd.append(ENTRY.order, payload.orderText);
+  fd.append(ENTRY.notes, payload.notes);
+  // no-cors: Google Forms doesn't send back CORS headers, response is opaque but the submission still lands in the Sheet.
+  return fetch(GOOGLE_FORM_ACTION, { method:"POST", mode:"no-cors", body: fd });
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  if(!document.getElementById("products")) return; // cart UI only lives on products.html
+  renderCart();
+
+  document.getElementById("cartFab")?.addEventListener("click", ()=>toggleCartDrawer());
+  document.getElementById("cartClose")?.addEventListener("click", ()=>toggleCartDrawer(false));
+  document.getElementById("cartOverlay")?.addEventListener("click", ()=>toggleCartDrawer(false));
+
+  document.addEventListener("click", (e)=>{
+    const cartBtn = e.target.closest(".chip-cart");
+    if(cartBtn){ addToCart(cartBtn.dataset.item); return; }
+
+    const act = e.target.closest("[data-act]");
+    if(act){
+      const name = act.dataset.name;
+      if(act.dataset.act==="inc") changeQty(name, 1);
+      if(act.dataset.act==="dec") changeQty(name, -1);
+      if(act.dataset.act==="remove") removeFromCart(name);
+    }
+  });
+
+  const checkoutForm = document.getElementById("checkoutForm");
+  if(checkoutForm){
+    checkoutForm.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      const status = document.getElementById("cartStatus");
+      if(cart.length===0){ alert("আপনার কার্ট খালি — অন্তত একটা পণ্য যোগ করুন।"); return; }
+
+      const name = document.getElementById("co-name").value.trim();
+      const phone = document.getElementById("co-phone").value.trim();
+      const address = document.getElementById("co-address").value.trim();
+      const notes = document.getElementById("co-notes").value.trim();
+      if(!name || !phone || !address){ alert("নাম, ফোন নম্বর ও ঠিকানা লিখুন।"); return; }
+
+      const orderText = cart.map(i=>`${i.name} x${i.qty}`).join(", ");
+      const submitBtn = checkoutForm.querySelector("button[type=submit]");
+      if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = "পাঠানো হচ্ছে..."; }
+
+      submitOrderToGoogleForm({name, phone, address, orderText, notes})
+        .then(()=>{
+          const waMsg = encodeURIComponent(
+            `নতুন অর্ডার:\nনাম: ${name}\nফোন: ${phone}\nঠিকানা: ${address}\nপণ্য: ${orderText}${notes ? "\nনোট: "+notes : ""}`
+          );
+          window.open(`https://wa.me/8801713366224?text=${waMsg}`, "_blank");
+
+          cart = [];
+          saveCart();
+          renderCart();
+          checkoutForm.reset();
+          toggleCartDrawer(false);
+          if(status){
+            status.textContent = "আপনার অর্ডার জমা হয়েছে! আমরা শীঘ্রই যোগাযোগ করব।";
+            status.classList.add("show");
+            setTimeout(()=>status.classList.remove("show"), 6000);
+          }
+        })
+        .catch(()=>{
+          alert("দুঃখিত, অর্ডার পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন অথবা সরাসরি WhatsApp এ অর্ডার করুন।");
+        })
+        .finally(()=>{
+          if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = "অর্ডার সাবমিট করুন"; }
+        });
+    });
+  }
 });
