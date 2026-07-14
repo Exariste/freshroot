@@ -47,75 +47,66 @@
       </div>
 
       <div class="tabs" id="tabs">
-        <button class="tab-btn active" data-tab="grocery">🛒 Grocery</button>
-        <button class="tab-btn" data-tab="household">🏠 Household, Personal &amp; Baby Care</button>
-        <button class="tab-btn" data-tab="agro">🌾 Agro Solutions</button>
+        <button class="tab-btn active" data-tab="oil">🫒 Oil &amp; Spices</button>
+        <button class="tab-btn" data-tab="home">🧼 Home Care</button>
+        <button class="tab-btn" data-tab="beauty">💄 Beauty Care</button>
+        <button class="tab-btn" data-tab="personal">🌿 Personal Care</button>
+        <button class="tab-btn" data-tab="baby">👶 Baby Care</button>
+        <button class="tab-btn" data-tab="grocery">🥜 Food &amp; Grocery</button>
       </div>
 
       <div class="no-results" id="noResults">No products match your search.</div>
 
-      <!-- GROCERY -->
-      <div class="category-panel active" data-panel="grocery">
-        <div class="panel-title">🛒 Grocery <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
-
-        <div class="subgroup" id="sub-rice">
-          <div class="subgroup-label">Rice</div>
-          <div class="chip-row"></div>
-        </div>
-        <div class="subgroup" id="sub-pulses">
-          <div class="subgroup-label">Pulses</div>
-          <div class="chip-row"></div>
-        </div>
-        <div class="subgroup" id="sub-oils">
-          <div class="subgroup-label">Oils &amp; Ghee</div>
-          <div class="chip-row"></div>
-        </div>
-        <div class="subgroup" id="sub-spices">
-          <div class="subgroup-label">Spices</div>
-          <div class="chip-row"></div>
-        </div>
-        <div class="subgroup" id="sub-essentials">
-          <div class="subgroup-label">Essentials</div>
+      <!-- OIL & SPICES -->
+      <div class="category-panel active" data-panel="oil">
+        <div class="panel-title">🫒 Oil &amp; Spices <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
+        <div class="subgroup" id="sub-oil">
+          <div class="subgroup-label">তেল ও মসলা</div>
           <div class="chip-row"></div>
         </div>
       </div>
 
-      <!-- HOUSEHOLD -->
-      <div class="category-panel" data-panel="household">
-        <div class="panel-title">🏠 Household, Personal &amp; Baby Care <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
-
-        <div class="subgroup" id="sub-householdcare">
-          <div class="subgroup-label">Household Care</div>
-          <div class="chip-row"></div>
-        </div>
-        <div class="subgroup" id="sub-mosquito">
-          <div class="subgroup-label">Mosquito Protection</div>
-          <div class="chip-row"></div>
-        </div>
-        <div class="subgroup" id="sub-personalcare">
-          <div class="subgroup-label">Personal Care</div>
-          <div class="chip-row"></div>
-        </div>
-        <div class="subgroup" id="sub-beautycare">
-          <div class="subgroup-label">Beauty Care</div>
-          <div class="chip-row"></div>
-        </div>
-        <div class="subgroup" id="sub-babycare">
-          <div class="subgroup-label">Baby Care</div>
+      <!-- HOME CARE -->
+      <div class="category-panel" data-panel="home">
+        <div class="panel-title">🧼 Home Care <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
+        <div class="subgroup" id="sub-home">
+          <div class="subgroup-label">হোম কেয়ার</div>
           <div class="chip-row"></div>
         </div>
       </div>
 
-      <!-- AGRO -->
-      <div class="category-panel" data-panel="agro">
-        <div class="panel-title">🌾 Agro Solutions <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
-
-        <div class="subgroup" id="sub-livestock">
-          <div class="subgroup-label">Livestock &amp; Poultry Feed</div>
+      <!-- BEAUTY CARE -->
+      <div class="category-panel" data-panel="beauty">
+        <div class="panel-title">💄 Beauty Care <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
+        <div class="subgroup" id="sub-beauty">
+          <div class="subgroup-label">বিউটি কেয়ার</div>
           <div class="chip-row"></div>
         </div>
-        <div class="subgroup" id="sub-vet">
-          <div class="subgroup-label">Veterinary Products</div>
+      </div>
+
+      <!-- PERSONAL CARE -->
+      <div class="category-panel" data-panel="personal">
+        <div class="panel-title">🌿 Personal Care <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
+        <div class="subgroup" id="sub-personal">
+          <div class="subgroup-label">পার্সোনাল কেয়ার</div>
+          <div class="chip-row"></div>
+        </div>
+      </div>
+
+      <!-- BABY CARE -->
+      <div class="category-panel" data-panel="baby">
+        <div class="panel-title">👶 Baby Care <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
+        <div class="subgroup" id="sub-baby">
+          <div class="subgroup-label">বেবি কেয়ার</div>
+          <div class="chip-row"></div>
+        </div>
+      </div>
+
+      <!-- FOOD & GROCERY -->
+      <div class="category-panel" data-panel="grocery">
+        <div class="panel-title">🥜 Food &amp; Grocery <svg class="root-line" viewBox="0 0 400 20" height="20" style="width:100%"><path d="M0,10 C100,2 150,18 250,10 C300,4 350,16 400,10" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg></div>
+        <div class="subgroup" id="sub-grocery">
+          <div class="subgroup-label">খাদ্য ও মুদি</div>
           <div class="chip-row"></div>
         </div>
       </div>
@@ -141,14 +132,12 @@
     <div>
       <h4>Categories</h4>
       <ul>
-        <li><a href="products.html#sub-rice">Grocery</a></li>
-        <li><a href="products.html#sub-householdcare">Household Care</a></li>
-        <li><a href="products.html#sub-personalcare">Personal Care</a></li>
-        <li><a href="products.html#sub-beautycare">Beauty Care</a></li>
-        <li><a href="products.html#sub-babycare">Baby Care</a></li>
-        <li><a href="products.html#sub-mosquito">Mosquito Protection</a></li>
-        <li><a href="products.html#sub-livestock">Livestock &amp; Poultry</a></li>
-        <li><a href="products.html#sub-vet">Veterinary Products</a></li>
+        <li><a href="products.html#sub-oil">Oil &amp; Spices</a></li>
+        <li><a href="products.html#sub-home">Home Care</a></li>
+        <li><a href="products.html#sub-beauty">Beauty Care</a></li>
+        <li><a href="products.html#sub-personal">Personal Care</a></li>
+        <li><a href="products.html#sub-baby">Baby Care</a></li>
+        <li><a href="products.html#sub-grocery">Food &amp; Grocery</a></li>
       </ul>
     </div>
     <div>
@@ -210,3 +199,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
