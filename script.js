@@ -68,9 +68,11 @@ const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C
 function chipHTML(item){
   const msg = encodeURIComponent(`আমি ${item} অর্ডার করতে চাই`);
   return `<span class="chip" data-name="${item.toLowerCase()}">
-    <span>${item}</span>
-    <button class="chip-cart" type="button" data-item="${item}" aria-label="কার্টে যোগ করুন">+</button>
-    <a class="chip-order" target="_blank" rel="noopener" href="https://wa.me/8801713366224?text=${msg}" aria-label="Order ${item} on WhatsApp">${WA_ICON}</a>
+    <span class="chip-text">${item}</span>
+    <span class="chip-actions">
+      <button class="chip-cart" type="button" data-item="${item}" aria-label="কার্টে যোগ করুন">+</button>
+      <a class="chip-order" target="_blank" rel="noopener" href="https://wa.me/8801713366224?text=${msg}" aria-label="Order ${item} on WhatsApp">${WA_ICON}</a>
+    </span>
   </span>`;
 }
 
